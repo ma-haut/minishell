@@ -1,0 +1,153 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_export.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/02/25 16:01:27 by md-harco          #+#    #+#             */
+/*   Updated: 2025/02/26 14:20:56 by md-harco         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "exec.h"
+
+/* args = tout ce qui suit la commande export et precede la redirection */
+/* shell = pointeur sur struct qui contient une copie de l'env */
+
+char	**dup_env(char **env)
+{
+	char	**copy;
+	int		count;
+	int		i;
+
+	count = 0;
+	i = 0;
+	while (env[count])
+		count++;
+	copy = malloc(sizeof(char *) * (count + 1));
+	while (i < count)
+	{
+		copy[i] = ft_strdup(env[i]);
+		i++;
+	}
+	copy[i] = NULL;
+	return (copy);
+}
+
+static char	**add_var_to_env(t_shell *shell, char *name, char *value)
+{
+	char	**new_env;
+	char	*temp;
+	int		count;
+	int		i;
+
+	count = 0;
+	i = 0;
+	while (shell->envp[count])
+		count++;
+	new_env = malloc(sizeof(char *) * (count + 2));
+	while (i < count)
+	{
+		new_env[i] = ft_strdup(shell->envp[i]);
+		i++;
+	}
+	temp = ft_strjoin(name, "=");
+	new_env[i] = ft_strjoin(temp, value);
+	new_env[i + 1] = NULL;
+	free(temp);
+	free(shell->envp);
+	free(name);
+	free(value);
+	return (new_env);
+}
+
+static int	find_char(char *str, char c)
+{
+	int	i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+			return (i);
+		i++;
+	}
+	return (0);
+}
+
+/* rule for var names : all char must be alphanum or '_' 
+	and 1st char can't be a digit */
+
+static int	check_var(char *name, char *value, char *arg)
+{
+	int	i;
+
+	i = 1;
+	if (!name || !value)
+		return (0);
+	if (!ft_isalpha(name[0]) && name[0] != '_')
+	{
+		ft_putstr_fd("minishell: export: '", 2);
+		ft_putstr_fd(arg, 2);
+		ft_putstr_fd("': not a valid identifier\n", 2);
+		return (0);
+	}
+	while (name[i])
+	{
+		if (!ft_isalnum(name[i]) && name[i] != '_')
+		{
+			ft_putstr_fd("minishell: export: '", 2);
+			ft_putstr_fd(arg, 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
+			return (0);
+		}
+		i++;
+	}
+	return (1);
+}
+
+void	ft_export(char **args, t_shell *shell)
+{
+	char	*name;
+	char	*value;
+	int		i;
+	int		i_equal;
+
+	i = 0;
+	if (!args || !args[0])
+		return ;
+	while (args[i])
+	{
+		if (ft_strchr(args[i], '='))
+		{
+			i_equal = find_char(args[i], '=');
+			name = ft_strndup(args[i], i_equal);
+			value = ft_strdup(args[i] + i_equal + 1);
+			if (!check_var(name, value, args[i]))
+			{
+				free(name);
+				free(value);
+			}
+			shell->envp = add_var_to_env(shell, name, value);
+		}
+		i++;
+	}
+}
+
+/* int	main(int ac, char **av, char **env)
+{
+	t_shell shell;
+
+	shell.envp = dup_env(env);
+	ft_printf("---BEFORE CHANGES---\n");
+	ft_env(NULL, &shell);
+	if (ac > 1)
+	{
+		ft_export(av + 1, &shell);
+		ft_printf("---AFTER EXPORT---\n");
+		ft_env(NULL, &shell);
+		free(shell.envp);
+	}
+	return (0);
+} */
