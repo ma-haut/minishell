@@ -6,22 +6,31 @@
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 15:44:35 by md-harco          #+#    #+#             */
-/*   Updated: 2025/02/26 16:40:52 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/03/03 17:22:12 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GLOBAL_H
 # define GLOBAL_H
 
-/* # ifndef G_EXIT_STATUS
-# define G_EXIT_STATUS
-extern int	g_exit_status;
-# endif */
+# include "libft.h"
+# include <unistd.h>
+# include <fcntl.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <stdbool.h>
+# include <dirent.h>
+# include <limits.h>
+
+extern int	g_last_exit_status;
 
 typedef struct s_shell
 {
 	char	**envp;
-	int		last_exit_status;
+	int		nbpipes;
+	int		nbproc;
+	pid_t	*pids;
+	int		(*pipes)[2];
 	
 }	t_shell;
 

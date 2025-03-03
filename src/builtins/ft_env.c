@@ -6,7 +6,7 @@
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 17:33:28 by md-harco          #+#    #+#             */
-/*   Updated: 2025/02/26 11:39:54 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/03/03 14:45:18 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 /* args = tout ce qui suit la commande env et precede la redirection */
 
-void	ft_env(char **args, t_shell *shell)
+int	ft_env(char **args, t_shell *shell)
 {
 	int	i;
 
@@ -22,8 +22,9 @@ void	ft_env(char **args, t_shell *shell)
 	if (args)
 	{
 		ft_putstr_fd("env: too many arguments\n", 2);
-		return ;
+		return (EXIT_FAILURE);
 	}
 	while (shell->envp[i])
 		ft_printf("%s\n", shell->envp[i++]);
+	return (EXIT_SUCCESS);
 }

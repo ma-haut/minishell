@@ -70,7 +70,15 @@ SRC = main.c\
 		builtins/ft_export.c\
 		builtins/ft_pwd.c\
 		builtins/ft_unset.c\
+		builtins/env_utils.c\
 		exec/exec.c\
+		exec/exec2.c\
+		exec/check_files.c\
+		exec/get_info.c\
+		exec/get_path.c\
+		utils/free_stuff.c\
+		utils/handle_errors.c\
+		utils/init_shell.c
 
 OBJ = $(SRC:.c=.o)
 SRC := $(addprefix $(SRCDIR)/, $(SRC))
@@ -131,11 +139,11 @@ $(NAME): $(OBJ) $(LIBFT)
 # Libft
 $(LIBFT):
 	$(V)$(MAKE) --silent -C $(LIBFT_DIR)
-	$(V)echo '[$(NAME)] Libft build successfully'
+	$(V)echo '[$(NAME)] Libft successfully built'
 
 # Clean Rules
 clean:
-	$(V)echo $(RED)'[$(NAME)] Cleaning objects'd$(RESET)
+	$(V)echo $(RED)'[$(NAME)] Cleaning objects'$(RESET)
 	$(V)rm -rf $(OBJDIR)
 
 fclean: clean

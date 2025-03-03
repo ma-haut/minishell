@@ -6,7 +6,7 @@
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 18:37:25 by md-harco          #+#    #+#             */
-/*   Updated: 2025/02/26 14:21:18 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/03/03 17:26:16 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,35 +41,13 @@ static char	**rm_var_from_env(t_shell *shell, char *var, int n)
 	return (new_env);
 }
 
-static int	is_var(char *var, t_shell *shell)
-{
-	int		i;
-	char	*temp;
-	int		len;
-
-	i = 0;
-	temp = ft_strjoin(var, "=");
-	len = ft_strlen(temp);
-	while (shell->envp[i])
-	{
-		if (ft_strncmp(temp, shell->envp[i], len) == 0)
-		{
-			free(temp);
-			return (1);
-		}
-		i++;
-	}
-	free(temp);
-	return (0);
-}
-
-void	ft_unset(char **args, t_shell *shell)
+int	ft_unset(char **args, t_shell *shell)
 {
 	int		i;
 
 	i = 0;
 	if (!args || !args[0])
-		return ;
+		return (EXIT_FAILURE);
 	while (args[i])
 	{
 		if (is_var(args[i], shell))
@@ -77,6 +55,7 @@ void	ft_unset(char **args, t_shell *shell)
 					ft_strlen(args[i]) + 1);
 		i++;
 	}
+	return (EXIT_SUCCESS);
 }
 
 /* int	main(int ac, char **av, char **env)
