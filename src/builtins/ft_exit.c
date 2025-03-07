@@ -6,7 +6,7 @@
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 11:33:36 by md-harco          #+#    #+#             */
-/*   Updated: 2025/03/03 17:24:10 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/03/07 16:09:23 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	ft_exit(char **args, t_shell *shell)
 	if (args[1])
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-		return (EXIT_FAILURE);
+		return (free_shell(shell), EXIT_FAILURE);
 	}
 	if (args[0] && !ft_isnum(args[0]))
 	{
@@ -51,6 +51,6 @@ int	ft_exit(char **args, t_shell *shell)
 			status = temp;
 	}
 	ft_printf("exit\n");
-	free_strtab(shell->envp);
+	free_shell(shell);
 	exit(status);
 }

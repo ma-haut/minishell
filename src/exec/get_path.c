@@ -6,7 +6,7 @@
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 17:54:20 by md-harco          #+#    #+#             */
-/*   Updated: 2025/02/26 17:54:58 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/03/06 15:12:36 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,10 @@ char	*get_path(char *cmd, char **envp)
 		pathname = ft_strjoin(paths[i], "/");
 		pathname = freejoin(pathname, cmd);
 		if (access(pathname, X_OK) == 0)
-			return (pathname);
+		{
+			free_strtab(paths);
+			return (pathname);	
+		}
 		free(pathname);
 		i++;
 	}

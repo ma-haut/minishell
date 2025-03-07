@@ -1,20 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   commands.h                                         :+:      :+:    :+:   */
+/*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/02/21 00:49:44 by arbaudou          #+#    #+#             */
-/*   Updated: 2025/03/04 14:39:34 by md-harco         ###   ########.fr       */
+/*   Created: 2025/02/11 12:37:13 by arbaudou          #+#    #+#             */
+/*   Updated: 2025/03/07 17:42:30 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMANDS_H
-#define COMMANDS_H
+#include "parsing.h"
 
-extern int	g_exit_status;
-extern char *valid_commands[];
-extern char *valid_operator[];
 
-#endif
+void	parsing(char *input, t_shell *shell)
+{	
+	shell->tokens = tokenize(input);
+	shell->tokens_copy = shell->tokens;
+	print_tokens(shell->tokens);
+    shell->root = parse(&shell->tokens);
+    if (shell->root)
+    	print_ast(shell->root, 0);
+    printf("\n");
+}

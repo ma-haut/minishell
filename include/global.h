@@ -6,7 +6,7 @@
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 15:44:35 by md-harco          #+#    #+#             */
-/*   Updated: 2025/03/03 17:22:12 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/03/07 21:24:17 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,18 +21,10 @@
 # include <stdbool.h>
 # include <dirent.h>
 # include <limits.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
-extern int	g_last_exit_status;
-
-typedef struct s_shell
-{
-	char	**envp;
-	int		nbpipes;
-	int		nbproc;
-	pid_t	*pids;
-	int		(*pipes)[2];
-	
-}	t_shell;
+extern int	g_last_exit_code;
 
 typedef enum e_token_type
 {
@@ -76,5 +68,20 @@ typedef struct s_ast
 	struct s_ast	*left;
 	struct s_ast	*right;
 }					t_ast;
+
+typedef struct s_shell
+{
+	char	**envp;
+	t_ast	*root;
+	t_token	*tokens;
+	t_token *tokens_copy;
+	int		fd_in;
+	int		fd_out;
+	char	*delim;
+	int		cmd_count;
+	bool	pipe;
+	int		**pipes;
+	pid_t	*pids;
+}	t_shell;
 
 #endif

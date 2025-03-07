@@ -6,7 +6,7 @@
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 13:46:44 by md-harco          #+#    #+#             */
-/*   Updated: 2025/03/03 14:45:41 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/03/07 16:12:08 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 /* args = tout ce qui suit la commande builtin echo et precede la redirection */
 
-int	ft_echo(char **args)
+int	ft_echo(char **args, t_shell *shell)
 {
 	int		i;
 	bool	newline;
 
 	if (!args)
-		return (EXIT_FAILURE);
+		return (free_shell(shell), EXIT_FAILURE);
 	if (ft_strncmp(args[0], "-n", 3) == 0)
 	{
 		i = 1;
@@ -37,5 +37,5 @@ int	ft_echo(char **args)
 		ft_printf("%s\n", args[i]);
 	else
 		ft_printf("%s", args[i]);
-	return (EXIT_SUCCESS);
+	return (free_shell(shell), EXIT_SUCCESS);
 }

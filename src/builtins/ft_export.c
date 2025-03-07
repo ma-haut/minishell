@@ -6,7 +6,7 @@
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:01:27 by md-harco          #+#    #+#             */
-/*   Updated: 2025/03/03 17:25:04 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/03/07 16:09:48 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,8 @@ static int	check_var_name(char *name, char *value, char *arg)
 	return (1);
 }
 
+/* checker si 1er nom de var pas correct et 2nd  correct*/
+
 int	ft_export(char **args, t_shell *shell)
 {
 	char	*name;
@@ -106,12 +108,12 @@ int	ft_export(char **args, t_shell *shell)
 			name = ft_strndup(args[i], i_equal);
 			value = ft_strdup(args[i] + i_equal + 1);
 			if (!check_var_name(name, value, args[i]))
-				return (free(name), free(value), EXIT_FAILURE);
+				return (free_shell(shell), free(name), free(value), EXIT_FAILURE);
 			add_var_to_env(shell, name, value);
 		}
 		i++;
 	}
-	return (EXIT_SUCCESS);
+	return (free_shell(shell), EXIT_SUCCESS);
 }
 
 /* int	main(int ac, char **av, char **env)

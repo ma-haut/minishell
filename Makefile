@@ -53,9 +53,12 @@ INCDIR = include
 
 # Source Files
 SRC = main.c\
+		parsing/parsing.c\
+		parsing/parsing_utils.c\
 		parsing/node_init.c\
 		parsing/tokenize.c\
 		parsing/tokenize2.c\
+		parsing/tokenize3.c\
 		parsing/tokenize_utils.c\
 		parsing/tokenize_utils2.c\
 		parsing/tokenize_utils3.c\
@@ -63,6 +66,7 @@ SRC = main.c\
 		parsing/parse.c\
 		parsing/parse_tokens.c\
 		parsing/commands.c\
+		parsing/free_struct.c\
 		builtins/ft_cd.c\
 		builtins/ft_echo.c\
 		builtins/ft_env.c\
@@ -72,10 +76,11 @@ SRC = main.c\
 		builtins/ft_unset.c\
 		builtins/env_utils.c\
 		exec/exec.c\
-		exec/exec2.c\
-		exec/check_files.c\
-		exec/get_info.c\
+		exec/exec_commands.c\
+		exec/exec_pipes.c\
+		exec/handle_redir.c\
 		exec/get_path.c\
+		exec/files_utils.c\
 		utils/free_stuff.c\
 		utils/handle_errors.c\
 		utils/init_shell.c
@@ -90,7 +95,7 @@ LIBFT := $(LIBFT_DIR)/libft.a
 LIBFT_INCLUDE := $(LIBFT_DIR)#/include 		#Your header file in include dir ?
 # Libraries and Linker Flags
 LDFLAGS =  -L$(LIBFT_DIR)
-LIBS =  $(LIBFT)
+LIBS =  $(LIBFT) -lreadline
 
 # Archiver
 AR = ar

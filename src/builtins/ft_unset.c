@@ -6,7 +6,7 @@
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 18:37:25 by md-harco          #+#    #+#             */
-/*   Updated: 2025/03/03 17:26:16 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/03/07 16:10:24 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ int	ft_unset(char **args, t_shell *shell)
 
 	i = 0;
 	if (!args || !args[0])
-		return (EXIT_FAILURE);
+	return (free_shell(shell), EXIT_FAILURE);
 	while (args[i])
 	{
 		if (is_var(args[i], shell))
@@ -55,7 +55,7 @@ int	ft_unset(char **args, t_shell *shell)
 					ft_strlen(args[i]) + 1);
 		i++;
 	}
-	return (EXIT_SUCCESS);
+	return (free_shell(shell), EXIT_SUCCESS);
 }
 
 /* int	main(int ac, char **av, char **env)
