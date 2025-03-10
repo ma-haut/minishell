@@ -6,7 +6,7 @@
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 16:05:30 by md-harco          #+#    #+#             */
-/*   Updated: 2025/03/07 20:35:43 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/03/10 15:57:19 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	execute_ast(t_ast *node, t_shell *shell)
 {
 	if (!node)
 		return (g_last_exit_code);
+	expand_node(node, shell);
 	if (node->type == NODE_COMMAND)
 	{
 		if (shell->pipe == true)

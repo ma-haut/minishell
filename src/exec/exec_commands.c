@@ -6,7 +6,7 @@
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 16:49:21 by md-harco          #+#    #+#             */
-/*   Updated: 2025/03/07 20:24:26 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:39:00 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,18 +25,23 @@ int	is_builtin(char *cmd)
 	return (0);
 }
 
+
 int	execute_builtin(char *cmd, char **args, t_shell *shell)
 {
 	int	n;
 	int	result;
+	int saved_stdin;
+	int	saved_stdout;
 
+	save_std_fd(&saved_stdin, &saved_stdout);
+	dup_files(shell->fd_in, shell->fd_out);
 	n = ft_strlen(cmd) + 1;
 	if (ft_strncmp(cmd, "echo", n) == 0)
-		result = ft_echo(args, shell);
+		result = ft_echo(args);
 	else if (ft_strncmp(cmd, "cd", n) == 0)
 		result = ft_cd(args, shell);
 	else if (ft_strncmp(cmd, "pwd", n) == 0)
-		result = ft_pwd(args, shell);
+		result = ft_pwd(args);
 	else if (ft_strncmp(cmd, "export", n) == 0)
 		result = ft_export(args, shell);
 	else if (ft_strncmp(cmd, "unset", n) == 0)
@@ -45,6 +50,7 @@ int	execute_builtin(char *cmd, char **args, t_shell *shell)
 		result = ft_env(args, shell);
 	else
 		result = ft_exit(args, shell);
+	restore_std_fd(saved_stdin, saved_stdout);
 	g_last_exit_code = result;
 	return (result);
 }
@@ -54,23 +60,10 @@ void	error_command(char *cmd, t_shell *shell)
 	ft_putstr_fd("command not found: ", 2);
 	ft_putstr_fd(cmd, 2);
 	ft_putstr_fd("\n", 2);
-	free_shell(shell);
+	reset_shell(shell);
 	exit(127);
 }
 
-void	dup_files(int fd_in, int fd_out)
-{
-	if (fd_in != STDIN_FILENO)
-	{
-		dup2(fd_in, STDIN_FILENO);
-		close(fd_in);
-	}
-	if (fd_out != STDOUT_FILENO)
-	{
-		dup2(fd_out, STDOUT_FILENO);
-		close(fd_out);
-	}
-}
 
 int	execute_single_command(t_ast *node, t_shell *shell)
 {
@@ -78,12 +71,12 @@ int	execute_single_command(t_ast *node, t_shell *shell)
 	pid_t	pid;
 	int		status;
 
-	dup_files(shell->fd_in, shell->fd_out);
 	if (is_builtin(node->value[0]))
-		return(execute_builtin(node->value[0], node->value + 1, shell));
+		return(execute_builtin(node->value[0], node->value, shell));
 	pid = fork();
 	if (pid == 0)
 	{
+		dup_files(shell->fd_in, shell->fd_out);
 		if (access(node->value[0], X_OK) == 0)
 			execve(node->value[0], node->value, shell->envp);
 		else
@@ -107,13 +100,13 @@ int	execute_command(t_ast *node, t_shell *shell)
 
 	dup_files(shell->fd_in, shell->fd_out);
 	if (is_builtin(node->value[0]))
-		return(execute_builtin(node->value[0], node->value + 1, shell));
+		return(execute_builtin(node->value[0], node->value, shell));
 	if (access(node->value[0], X_OK) == 0)
 		execve(node->value[0], node->value, shell->envp);
 	path = get_path(node->value[0], shell->envp);
 	if (path == NULL)
 		error_command(node->value[0], shell);
 	execve(path, node->value, shell->envp);
-	free_shell(shell);
+	reset_shell(shell);
 	return (127);
 }

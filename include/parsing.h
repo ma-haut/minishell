@@ -6,7 +6,7 @@
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 12:52:42 by arbaudou          #+#    #+#             */
-/*   Updated: 2025/03/07 16:52:13 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/03/10 18:01:56 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,6 @@ int					handle_pipe(char *input, int i, t_token **tokens);
 int					handle_redirection_out(char *input, int i,
 						t_token **tokens);
 int					handle_redirection_in(char *input, int i, t_token **tokens);
-char				*expand_variable(char *word);
 void				parsing(char *input, t_shell *shell);
 int					check_error(t_token **tokens);
 
@@ -52,7 +51,6 @@ t_ast				*init_ast(t_ast *node);
 t_token				*create_token(t_token_type type, char *value);
 t_token				*add_token(t_token **head, t_token_type type, char *value);
 int					is_space(char c);
-void				print_tokens(t_token *tokens);
 int					is_redirection(t_token *token, int n);
 const char			*get_ast_type_str(t_ast_type type);
 const char			*get_token_type_str(t_token_type type);
@@ -67,5 +65,6 @@ int					print_error(t_token *tokens);
 
 /* A SUPPRIMER */
 void				print_ast(t_ast *node, int level);
+void				print_tokens(t_token *tokens);
 
 #endif

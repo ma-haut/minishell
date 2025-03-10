@@ -58,7 +58,6 @@ SRC = main.c\
 		parsing/node_init.c\
 		parsing/tokenize.c\
 		parsing/tokenize2.c\
-		parsing/tokenize3.c\
 		parsing/tokenize_utils.c\
 		parsing/tokenize_utils2.c\
 		parsing/tokenize_utils3.c\
@@ -81,8 +80,10 @@ SRC = main.c\
 		exec/handle_redir.c\
 		exec/get_path.c\
 		exec/files_utils.c\
+		exec/files_utils2.c\
 		utils/free_stuff.c\
 		utils/handle_errors.c\
+		utils/expand_vars.c\
 		utils/init_shell.c
 
 OBJ = $(SRC:.c=.o)

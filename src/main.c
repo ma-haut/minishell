@@ -6,7 +6,7 @@
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 13:34:22 by arbaudou          #+#    #+#             */
-/*   Updated: 2025/03/07 21:29:23 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:31:32 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,34 +14,27 @@
 
 int	g_last_exit_code;
 
-t_ast *create_ast_node(t_ast_type type, char **value) {
-    t_ast *node = malloc(sizeof(t_ast));
-    node->type = type;
-    node->value = value;
-    node->left = NULL;
-    node->right = NULL;
-    return node;
-}
-
 int main(int ac, char **av, char **envp)
 {
 	t_shell shell;
 	char *input;
-	(void) ac;
 	(void) av;
 
-	initialize_shell(&shell, envp);
-	while ((input = readline("minishell$ ")))
+	if (ac == 1)
 	{
-		ft_printf_error(2, "|%s|\n", input);
-		if (input)
+		initialize_shell(&shell, envp);
+		while (1)
 		{
-			parsing(input, &shell);
-			execute_ast(shell.root, &shell);
+			input = readline("minishell$ ");
+			if (input)
+			{
+				parsing(input, &shell);
+				if (shell.root)
+					execute_ast(shell.root, &shell);
+			}
+			add_history(input);
+			free(input);
+			reset_shell(&shell);
 		}
-		add_history(input);
-		free(input);
 	}
-	rl_clear_history();
-	free_shell_end(&shell);
 }

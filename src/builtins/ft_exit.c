@@ -6,13 +6,11 @@
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 11:33:36 by md-harco          #+#    #+#             */
-/*   Updated: 2025/03/07 16:09:23 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:54:33 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
-
-/* args = tout ce qui suit la commande exit et precede la redirection */
 
 static int	ft_isnum(char *str)
 {
@@ -33,24 +31,23 @@ int	ft_exit(char **args, t_shell *shell)
 	int	temp;
 
 	status = EXIT_SUCCESS;
-	if (args[1])
+	if (args[2])
 	{
 		ft_putstr_fd("minishell: exit: too many arguments\n", 2);
-		return (free_shell(shell), EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	}
-	if (args[0] && !ft_isnum(args[0]))
+	if (args[1] && !ft_isnum(args[1]))
+		ft_printf_error(2, "minishell: exit: %s: numeric argument required\n",
+				args[1]);
+	else if (args[1])
 	{
-		ft_putstr_fd("minishell: exit: ", 2);
-		ft_putstr_fd(args[0], 2);
-		ft_putstr_fd(": numeric argument required\n", 2);
-	}
-	else if (args[0])
-	{
-		temp = ft_atoi(args[0]);
+		temp = ft_atoi(args[1]);
 		if (temp >= 0 && temp <= 255)
 			status = temp;
 	}
 	ft_printf("exit\n");
-	free_shell(shell);
+	reset_shell(shell);
+	free_strtab(shell->envp);
+	rl_clear_history();
 	exit(status);
 }

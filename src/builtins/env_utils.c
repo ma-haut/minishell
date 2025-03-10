@@ -6,7 +6,7 @@
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/03 14:59:06 by md-harco          #+#    #+#             */
-/*   Updated: 2025/03/07 17:12:59 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/03/10 19:09:20 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,26 +32,26 @@ char	**dup_env(char **env)
 	return (copy);
 }
 
-int	is_var(char *var, t_shell *shell)
+bool	is_var(t_shell *shell, char *name)
 {
 	int		i;
 	char	*temp;
 	int		len;
 
 	i = 0;
-	temp = ft_strjoin(var, "=");
+	temp = ft_strjoin(name, "=");
 	len = ft_strlen(temp);
 	while (shell->envp[i])
 	{
 		if (ft_strncmp(temp, shell->envp[i], len) == 0)
 		{
 			free(temp);
-			return (1);
+			return (true);
 		}
 		i++;
 	}
 	free(temp);
-	return (0);
+	return (false);
 }
 
 void	update_var(t_shell *shell, char *name, char *value)
@@ -65,5 +65,22 @@ void	update_var(t_shell *shell, char *name, char *value)
 		i++;
 	free(shell->envp[i]);
 	shell->envp[i] = ft_strjoin(temp, value);
-	return (free(temp), free(name), free(value));
+	free(temp);
+}
+
+char	*ft_getenv(t_shell *shell, char *name)
+{
+	int		i;
+	char 	*value;
+	char	*temp;
+
+	i = 0;
+	if (!is_var(shell, name))
+		return (NULL);
+	temp = ft_strjoin(name, "=");
+	while (ft_strncmp(shell->envp[i], temp, ft_strlen(temp)) != 0)
+		i++;
+	value = ft_strdup(shell->envp[i] + ft_strlen(temp));
+	free(temp);
+	return (value);
 }

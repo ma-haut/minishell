@@ -6,7 +6,7 @@
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/26 15:44:35 by md-harco          #+#    #+#             */
-/*   Updated: 2025/03/07 21:24:17 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/03/10 16:12:47 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,6 @@ typedef struct s_shell
 	t_token *tokens_copy;
 	int		fd_in;
 	int		fd_out;
-	char	*delim;
 	int		cmd_count;
 	bool	pipe;
 	int		**pipes;

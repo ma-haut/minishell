@@ -6,7 +6,7 @@
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 20:03:16 by md-harco          #+#    #+#             */
-/*   Updated: 2025/03/07 21:07:40 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/03/10 15:01:01 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,22 @@ int	count_cmds(t_ast *node)
 	return (i);
 }
 
-int	**create_pipes(int	cmd_count)
+int	**create_pipes(int	cmd_count, t_shell *shell)
 {
 	int		**pipes;
 	int		i;
 
 	pipes = malloc(sizeof(int *) * (cmd_count - 1));
 	if (!pipes)
-		perror_exit("malloc");
+		perror_exit("malloc", shell);
 	i = 0;
 	while (i < cmd_count - 1)
 	{
 		pipes[i] = malloc(sizeof(int) * 2);
 		if (!pipes[i])
-			perror_exit("malloc");
+			perror_exit("malloc", shell);
 		if (pipe(pipes[i]) == -1)
-			perror_exit("pipe");
+			perror_exit("pipe", shell);
 		i++;
 	}
 	return (pipes);
@@ -56,7 +56,7 @@ void	create_child_process(t_ast *cmd_node, t_shell *shell, int i)
 	j = 0;
 	shell->pids[i] = fork();
 	if (shell->pids[i] < 0)
-		perror_exit("fork");
+		perror_exit("fork", shell);
 	if (shell->pids[i] == 0)
 	{
 		while (j < shell->cmd_count - 1)
@@ -102,8 +102,7 @@ int	parent_process(t_shell *shell)
         }
 		i++;
 	}
-	free(shell->pids);
-	return (g_last_exit_code);
+	return (free(shell->pids), g_last_exit_code);
 }
 
 int	execute_pipe(t_ast *node, t_shell *shell)
@@ -113,10 +112,10 @@ int	execute_pipe(t_ast *node, t_shell *shell)
 
 	i = 0;
 	shell->cmd_count = count_cmds(node);
-	shell->pipes = create_pipes(shell->cmd_count);
+	shell->pipes = create_pipes(shell->cmd_count, shell);
 	shell->pids = malloc(sizeof(pid_t) * shell->cmd_count);
 	if (!shell->pids)
-		perror_exit("malloc");
+		perror_exit("malloc", shell);
 	while (i < shell->cmd_count)
 	{
 		if (i < shell->cmd_count - 1)

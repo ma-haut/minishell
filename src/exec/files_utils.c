@@ -6,7 +6,7 @@
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/03/07 19:40:55 by md-harco          #+#    #+#             */
-/*   Updated: 2025/03/07 19:41:30 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/03/10 17:41:42 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,17 @@ void	change_fd_out(t_shell *shell, int fd)
 	shell->fd_out = fd;
 }
 
-int	check_infile(char *pathname)
+int	check_infile(char *pathname, t_shell *shell)
 {
 	int	fd;
 
 	fd = open(pathname, O_RDONLY);
 	if (fd == -1)
-		perror_exit(pathname);
+		perror_exit(pathname, shell);
 	return (fd);
 }
 
-int	check_outfile(char *pathname)
+int	check_outfile(char *pathname, t_shell *shell)
 {
 	int	fd;
 
@@ -45,11 +45,11 @@ int	check_outfile(char *pathname)
 	else
 		fd = open(pathname, O_RDWR);
 	if (fd == -1)
-		perror_exit(pathname);
+		perror_exit(pathname, shell);
 	return (fd);
 }
 
-int check_outfile_app(char *pathname)
+int check_outfile_app(char *pathname, t_shell *shell)
 {
 	int	fd;
 
@@ -58,6 +58,6 @@ int check_outfile_app(char *pathname)
 	else
 		fd = open(pathname, O_RDWR | O_APPEND);
 	if (fd == -1)
-		perror_exit(pathname);
+		perror_exit(pathname, shell);
 	return (fd);
 }

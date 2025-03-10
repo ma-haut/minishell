@@ -6,13 +6,13 @@
 /*   By: md-harco <md-harco@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/25 16:01:27 by md-harco          #+#    #+#             */
-/*   Updated: 2025/03/07 16:09:48 by md-harco         ###   ########.fr       */
+/*   Updated: 2025/03/10 16:05:15 by md-harco         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "exec.h"
 
-/* args = tout ce qui suit la commande export et precede la redirection */
+/* args = tout ce qui suit la commande export et n est pas une redir */
 /* shell = pointeur sur struct qui contient une copie de l'env */
 
 static void	add_var_to_env(t_shell *shell, char *name, char *value)
@@ -25,7 +25,7 @@ static void	add_var_to_env(t_shell *shell, char *name, char *value)
 	count = 0;
 	i = 0;
 
-	if (is_var(name, shell))
+	if (is_var(shell, name))
 		return (update_var(shell, name, value));
 	while (shell->envp[count])
 		count++;
@@ -97,9 +97,7 @@ int	ft_export(char **args, t_shell *shell)
 	int		i;
 	int		i_equal;
 
-	i = 0;
-	if (!args || !args[0])
-		return (EXIT_FAILURE);
+	i = 1;
 	while (args[i])
 	{
 		if (ft_strchr(args[i], '='))
@@ -108,27 +106,10 @@ int	ft_export(char **args, t_shell *shell)
 			name = ft_strndup(args[i], i_equal);
 			value = ft_strdup(args[i] + i_equal + 1);
 			if (!check_var_name(name, value, args[i]))
-				return (free_shell(shell), free(name), free(value), EXIT_FAILURE);
+				return (free(name), free(value), EXIT_FAILURE);
 			add_var_to_env(shell, name, value);
 		}
 		i++;
 	}
-	return (free_shell(shell), EXIT_SUCCESS);
+	return (EXIT_SUCCESS);
 }
-
-/* int	main(int ac, char **av, char **env)
-{
-	t_shell shell;
-
-	shell.envp = dup_env(env);
-	ft_printf("---BEFORE CHANGES---\n");
-	ft_env(NULL, &shell);
-	if (ac > 1)
-	{
-		ft_export(av + 1, &shell);
-		ft_printf("---AFTER EXPORT---\n");
-		ft_env(NULL, &shell);
-		free(shell.envp);
-	}
-	return (0);
-} */
